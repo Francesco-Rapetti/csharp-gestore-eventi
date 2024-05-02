@@ -45,6 +45,7 @@
                                 if (eventType < 1 || eventType > 2) throw new Exception("ERRORE: la tipologia di evento selezionata non esiste");
                                 switch (eventType)
                                 {
+                                    // istanzio prima gli eventi in modo da lanciare subito le relative eccezioni quando viene chiamata la funzione InserisciEvento()
                                     case 1:
                                         programma.AggiungiEvento(InserisciEvento(new Conferenza("asd", DateTime.MaxValue, 1, "asd", 0)));
                                         break;
