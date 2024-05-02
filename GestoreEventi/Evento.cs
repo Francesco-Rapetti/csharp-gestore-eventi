@@ -41,8 +41,6 @@ namespace GestoreEventi
 
         public void PrenotaPosti(int posti)
         {
-            if (this.Data < DateTime.Now)
-                throw new Exception("ERRORE: l'evento ha già preso luogo");
             if (posti <= 0)
                 throw new Exception("ERRORE: il numero di posti da prenotare non puo essere negativo");
             if (this.PostiPrenotati + posti > this.MaxPosti)
@@ -52,8 +50,6 @@ namespace GestoreEventi
 
         public void DisdiciPosti(int posti)
         {
-            if (this.Data < DateTime.Now)
-                throw new Exception("ERRORE: l'evento ha già preso luogo");
             if (posti <= 0)
                 throw new Exception("ERRORE: il numero di posti da disdire non puo essere negativo");
             if (this.PostiPrenotati - posti < 0)
