@@ -12,7 +12,7 @@ namespace GestoreEventi
         public string Titolo { get { return this._titolo; }
             set
             {
-                if (value == "")
+                if (string.IsNullOrEmpty(value))
                     throw new Exception("ERRORE: il titolo non puo essere vuoto");
                 this._titolo = value;
             } 
