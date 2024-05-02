@@ -33,7 +33,37 @@
                     for (int i = 0; i < numEventi; i++)
                     {
                         Console.WriteLine(Prettifier("Inserisci l'evento numero " + (i + 1)));
-                        programma.AggiungiEvento(InserisciEvento());
+                        int eventType = -1;
+                        while (control)
+                        {
+                            try
+                            {
+                                Console.WriteLine("Seleziona una tipologia di evento:");
+                                Console.WriteLine("1. Conferenza");
+                                Console.WriteLine("2. Evento generico");
+                                eventType = int.Parse(Console.ReadLine());
+                                if (eventType < 1 || eventType > 2) throw new Exception("ERRORE: la tipologia di evento selezionata non esiste");
+                                switch (eventType)
+                                {
+                                    case 1:
+                                        programma.AggiungiEvento(InserisciEvento(new Conferenza("asd", DateTime.MaxValue, 1, "asd", 0)));
+                                        break;
+                                    case 2:
+                                        programma.AggiungiEvento(InserisciEvento(new Evento("asd", DateTime.MaxValue, 1)));
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                control = false;
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                        }
+                        control = true;
+
+                       
                         Console.WriteLine("\n");
                     }
                     control = false;
@@ -44,7 +74,8 @@
             }
             control = true;
             Console.WriteLine(Prettifier($"Eventi del programma: {programma.NumeroEventi()}"));
-            Console.WriteLine(programma);
+            if (programma.NumeroEventi() > 0) Console.WriteLine(programma);
+            else Console.WriteLine("Nessun evento presente");
 
             while (control)
             {
@@ -55,7 +86,8 @@
                     List<Evento> eventi = programma.EventiData(data);
                     Console.WriteLine("\n");
                     Console.WriteLine(Prettifier($"Eventi del {data:dd/MM/yyyy}: {eventi.Count}"));
-                    ProgrammaEventi.StampaEventi(eventi);
+                    if (eventi.Count > 0)ProgrammaEventi.StampaEventi(eventi);
+                    else Console.WriteLine("Nessun evento presente nella data selezionata");
                     control = false;
                 } catch (Exception e)
                 {
@@ -63,17 +95,20 @@
                 }
             }
             control = true;
+            programma.SvuotaEventi();
 
             Console.ReadKey();
         }
 
-        static Evento InserisciEvento()
+        static Evento InserisciEvento(Evento evento) 
         {
             bool control = true;
-            // evento creato per sollevare eccezioni dopo ogni singolo step
-            Evento evento = new Evento("Prova", DateTime.MaxValue, 10);
+            
+
             string titolo = "";
             DateTime data = DateTime.Now;
+            string relatore = "";
+            double prezzo = 0;
             int maxPosti;
 
             // fase di input
@@ -109,13 +144,55 @@
             }
             control = true;
 
+            // caso conferenza
+            if (evento is Conferenza conferenza)
+            {
+                while (control)
+                {
+                    try
+                    {
+                        Console.Write("Inserisci il nome del relatore: ");
+                        relatore = Console.ReadLine();
+                        conferenza.Relatore = relatore;
+                        control = false;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                }
+                control = true;
+
+                while (control)
+                {
+                    try
+                    {
+                        Console.Write("Inserisci il prezzo del biglietto: ");
+                        prezzo = double.Parse(Console.ReadLine());
+                        conferenza.Prezzo = prezzo;
+                        control = false;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                }
+                control = true;
+            }
+
             while (control)
             {
                 try
                 {
                     Console.Write("Inserisci il numero massimo di posti: ");
                     maxPosti = int.Parse(Console.ReadLine());
-                    evento = new Evento(titolo, data, maxPosti);
+                    if (evento is Evento e)
+                    {
+                        e = new Evento(titolo, data, maxPosti);
+                    } else if (evento is Conferenza c)
+                    {
+                        c = new Conferenza(titolo, data, maxPosti, relatore, prezzo);
+                    }
                     control = false;
                 }
                 catch (Exception e)
