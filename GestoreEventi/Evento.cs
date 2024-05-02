@@ -8,21 +8,23 @@ namespace GestoreEventi
 {
     internal class Evento
     {
-        public string Titolo { get { return Titolo; } 
+        private string _titolo;
+        public string Titolo { get { return this._titolo; }
             set
             {
                 if (value == "")
                     throw new Exception("ERRORE: il titolo non puo essere vuoto");
-                Titolo = value;
+                this._titolo = value;
             } 
         }
-        public DateTime Data { get { return Data; } 
+        private DateTime _data; 
+        public DateTime Data { get { return this._data; } 
             set
             {
                 if (value < DateTime.Now)
                     throw new Exception("ERRORE: la data non puo essere antecedente ad oggi");
-                Data = value;
-            } 
+                this._data = value;
+            }
         }
         public int MaxPosti { get; }
         public int PostiPrenotati { get; private set; }
@@ -59,6 +61,6 @@ namespace GestoreEventi
             this.PostiPrenotati -= posti;
         }
 
-        public override string ToString() => $"{Data.ToString("dd/MM/yyyy")} - {Titolo}";
+        public override string ToString() => $"{Data:dd/MM/yyyy} - {Titolo}";
     }
 }
