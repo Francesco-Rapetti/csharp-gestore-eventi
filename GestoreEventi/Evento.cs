@@ -34,7 +34,7 @@ namespace GestoreEventi
             this.Titolo = titolo;
             this.Data = data;
             if (maxPosti <= 0)
-                throw new Exception("ERRORE: il numero massimo di posti non puo essere negativo");
+                throw new Exception("ERRORE: il numero massimo di posti non puo essere negativo o nullo");
             this.MaxPosti = maxPosti;
             this.PostiPrenotati = 0;
         }
